@@ -9,9 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author caoyongcheng
@@ -45,6 +45,28 @@ public class MenuController {
         try {
             MenuDTO saveMenuDTO = menuService.prependMenu(menuDTO, parentId);
             return ResponseEntity.ok(saveMenuDTO);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "获取菜单和子菜单")
+    @GetMapping("/menus/{id}")
+    public HttpEntity<?> getMenuAndChildren(@PathVariable String id) {
+        try {
+            List<MenuDTO> menuAndChildren = menuService.getMenuAndChildren(id);
+            return ResponseEntity.ok(menuAndChildren);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "获取菜单和子菜单的树形结构")
+    @GetMapping("/menus/{id}/tree")
+    public HttpEntity<?> getMenuAndChildrenTree(@PathVariable String id) {
+        try {
+            MenuDTO menuDTO = menuService.getMenuAndChildrenTree(id);
+            return ResponseEntity.ok(menuDTO);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

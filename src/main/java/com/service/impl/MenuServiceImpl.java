@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author CaoYongCheng
@@ -56,6 +56,57 @@ public class MenuServiceImpl implements MenuService {
         MenuPO menuPO = BeanCopyUtils.copy(menuDTO, MenuPO.class);
         MenuPO saveMenuPO = menuRepository.save(menuPO);
         return BeanCopyUtils.copy(saveMenuPO, MenuDTO.class);
+    }
+
+    @Override
+    public List<MenuDTO> getMenuAndChildren(String id) {
+        List<MenuPO> menuPOS = menuRepository.getMenuAndChildren(id);
+        return BeanCopyUtils.copyList(menuPOS, MenuDTO.class);
+    }
+
+    @Override
+    public MenuDTO getMenuAndChildrenTree(String id) {
+        List<MenuDTO> menus = getMenuAndChildren(id);
+        if (menus.size() == 0) {
+            return null;
+        }
+        Iterator<MenuDTO> iterator = menus.iterator();
+        MenuDTO previous = iterator.next();
+        list2tree(iterator, previous);
+        return previous;
+    }
+
+    private void list2tree(Iterator<MenuDTO> iterator, MenuDTO previous) {
+        if (previous.getChildren() == null) {
+            previous.setChildren(new ArrayList<>());
+        }
+        // 记录parents
+        Stack<MenuDTO> parents = new Stack<>();
+        parents.push(previous);
+
+        while (iterator.hasNext()) {
+            MenuDTO next = iterator.next();
+            if (next.getChildren() == null) {
+                next.setChildren(new ArrayList<>());
+            }
+            // 表示是当前parent的子节点
+            if (next.getLeft() > previous.getLeft() && next.getRight() < previous.getRight()) {
+                previous.getChildren().add(next);
+                // 在parents形成记录
+                parents.push(next);
+            } else {
+                while (!parents.empty()) {
+                    MenuDTO parent = parents.peek();
+                    if (next.getLeft() > parent.getLeft() && next.getRight() < parent.getRight()) {
+                        parent.getChildren().add(next);
+                        break;
+                    }
+                    parents.pop();
+                }
+            }
+            previous = next;
+        }
+
     }
 
     /**

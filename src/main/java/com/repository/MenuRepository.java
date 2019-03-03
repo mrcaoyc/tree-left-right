@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author CaoYongCheng
@@ -32,4 +33,13 @@ public interface MenuRepository extends JpaRepository<MenuPO, String> {
     @Query(value = "update menu set menu.left=menu.left+2 where menu.left>=?1 ; ", nativeQuery = true)
     void leftAdd(int value);
 
+
+    /**
+     * 获取菜单和子菜单
+     *
+     * @param id 菜单ID
+     * @return 菜单列表
+     */
+    @Query(value = "select m1.* from menu m1 inner join menu m2 on m1.left>=m2.left and m1.right<=m2.right where m2.id=?1 order by m1.left",nativeQuery = true)
+    List<MenuPO> getMenuAndChildren(String id);
 }
