@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id "org.springframework.boot" version "2.1.3.RELEASE"
+}
+
+group 'tree-left-right'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-starter-parent:2.1.3.RELEASE')
+    api('org.springframework.boot:spring-boot-starter-web')
+    api('org.springframework.boot:spring-boot-starter-actuator')
+    api('org.springframework.boot:spring-boot-starter-data-rest')
+    api('org.springframework.boot:spring-boot-starter-validation')
+    api('org.springframework.boot:spring-boot-starter-hateoas')
+    api('org.springframework.boot:spring-boot-configuration-processor')
+    api('org.springframework.boot:spring-boot-starter-data-jpa')
+    api('com.spring4all:swagger-spring-boot-starter:1.8.0.RELEASE')
+    api('io.swagger:swagger-annotations:1.5.22')
+    api('io.swagger:swagger-models:1.5.22')
+    api('mysql:mysql-connector-java')
+    annotationProcessor('org.projectlombok:lombok:1.18.6')
+    compileOnly('org.projectlombok:lombok:1.18.6')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
