@@ -16,3 +16,5 @@ spring:
       pool-name: DatebookHikariCP
   jpa:
     show-sql: true
+swagger:
+  exclude-path: /error

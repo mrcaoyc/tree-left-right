@@ -21,6 +21,7 @@ dependencies {
     api('org.springframework.boot:spring-boot-starter-hateoas')
     api('org.springframework.boot:spring-boot-configuration-processor')
     api('org.springframework.boot:spring-boot-starter-data-jpa')
+    api('org.springframework.boot:spring-boot-starter-freemarker')
     api('com.spring4all:swagger-spring-boot-starter:1.8.0.RELEASE')
     api('io.swagger:swagger-annotations:1.5.22')
     api('io.swagger:swagger-models:1.5.22')
